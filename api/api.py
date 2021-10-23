@@ -1,5 +1,4 @@
-from flask import Flask
-from flask.json import jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -31,5 +30,18 @@ def home():
 def api_books():
     return jsonify(books)
 
+@app.route('/api/books/id/', methods=["GET"])
+def api_books_byId():
+    if 'id' in request.args:
+        id = int(request.args['id'])
+    else:
+        return "Error! No ags [id] provided!"
+    
+    result = []
+    for book in books:
+        if book['id'] == id:
+            result.append(book)
+    return jsonify(result)
+    
 app.run()
 
